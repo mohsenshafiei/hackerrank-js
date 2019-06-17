@@ -1,45 +1,47 @@
-function filterRightAdjacent(key, arr) {
-  return arr.reduce((obj, fence, index) => {
-    if (fence < key && index > arr.indexOf(key)) {
+function filterRight(pivot, arr, location) {
+  return arr.reduce((result, fence, index) => {
+    if (fence < pivot && index > location) {
       return {
         ok: true,
-        list: obj.list
+        list: result.list
       }
     }
-    if (fence > key && index > arr.indexOf(key) && obj.ok === false) {
+    if (fence >= pivot && index > location && result.ok === false) {
       return {
         ok: false,
-        list: [...(obj.list), fence]
+        list: [...(result.list), fence]
       }
     }
-    return obj;
+    return result;
   }, { list: [], ok: false}).list;
 };
 
-function filterLeftAdjacent(key, arr) {
-  return arr.reduce((obj, fence, index) => {
-    if (fence < key && index > arr.indexOf(key)) {
+function filterLeft(pivot, arr, location) {
+  return arr.reduce((result, fence, index) => {
+    if (fence < pivot && index > location) {
       return {
         ok: true,
-        list: obj.list
+        list: result.list
       }
     }
-    if (fence > key && index < arr.indexOf(key) && obj.ok === false) {
+    if (fence >= pivot && index < location && result.ok === false) {
       return {
         ok: false,
-        list: [...(obj.list), fence]
+        list: [...(result.list), fence]
       }
     }
-    return obj;
+    return result;
   }, { list: [], ok: false}).list;
 };
 
 function maxRectangle(arr) {
-  arr.forEach(pivot => {
-    const right = filterRightAdjacent(pivot, arr);
-    const left = filterLeftAdjacent(pivot, arr);
-    console.log(pivot, right, left, pivot * (right.length + left.length + 1));
+  let list = [];
+  arr.forEach((pivot, index) => {
+    const right = filterRight(pivot, arr, index);
+    const left = filterLeft(pivot, arr, index);
+    list.push(pivot * (right.length + left.length + 1));
   });
+  return Math.max(...list);
 }
 
-maxRectangle([2,5,7,4,1,8]);
+console.log(maxRectangle([2,5,7,4,1,8])); //12
