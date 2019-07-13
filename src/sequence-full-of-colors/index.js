@@ -52,7 +52,6 @@ const validate = (str) => {
     green: 0,
     yellow: 0,
   });
-  console.log(final);
   return ok && validateEquality(final);
 }
 
